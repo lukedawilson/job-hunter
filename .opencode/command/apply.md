@@ -29,12 +29,9 @@ Job ID: $ARGUMENTS
    - You were unable to inspect the form (e.g. blocked by auth wall).
    If written, save to `applications/<id>/cover-letter.md`. Address the hiring manager, map specific experience to the role, keep it 250-350 words.
 
-7. **CV tweaks**: Output a bullet list in the terminal — do NOT write a file. Each delta should be concrete enough to apply immediately:
-   - "Reorder: move [role] to the top of Experience"
-   - "Emphasise: add [skill/keyword] to Summary"
-   - "Add keyword: [term] to [section]"
-   - "Trim: remove or shrink [role] — less relevant to this job"
-   - Do NOT fabricate experience — only reorder, emphasise, or rephrase what's in the profile
+7. **CV suitability check**: Decide if the base CV in `profile.md` is a good fit for this role. If it is, say: "CV is suitable for this role — no changes needed." If it isn't, flag it plainly: "CV is a poor match for this role — [one sentence explaining why]."
+
+   You may suggest 1-3 tweaks only if this role is genuinely different from the user's typical target roles and warrants special attention (e.g. it's a Rust role in an otherwise TypeScript/C# profile, or it asks for a niche skill the user has but hasn't surfaced). Do not suggest tweaks for routine applications — the base CV is tuned for the user's target roles already.
 
 8. **Summary**: Present what was found and created. Ask: "Mark this job as applied? (y/n)". Only update `jobs.json` if they confirm.
 
