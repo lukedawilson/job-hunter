@@ -78,9 +78,10 @@ Dynamically expand this list per search — if a relevant source is discovered m
        │
        ▼
   /search ────▶ /track ────▶ /summarise ────▶ /apply
-                                                 │
-       ◀─────────────────────────────────────────┘
-       │
-       ▼
-  /pipeline
+       ▲                        ▲    │            │
+       │                        │    │            │
+       │                        │    ▼            │
+       │                     /pipeline ◀──────────┘
+       │                        │
+       └────────────────────────┘
 ```
