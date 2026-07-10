@@ -35,4 +35,4 @@ Job ID: $ARGUMENTS
 
 8. **Summary**: Present what was found and created. Ask: "Mark this job as applied? (y/n)". Only update `jobs.json` if they confirm.
 
-9. If confirmed, change the job's status to `"applied"` and set `dates.applied` to today's date. Then present: "Application materials ready in `applications/<id>/`. Job marked as applied. Run `/pipeline-status` to see your pipeline."
+9. If confirmed, change the job's status to `"applied"` and set `dates.applied` to today's date. Then present: "Application materials ready in `applications/<id>/`. Job marked as applied. Run `/pipeline` to see your pipeline."

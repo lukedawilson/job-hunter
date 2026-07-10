@@ -14,7 +14,8 @@ Run `/build-profile` first. It interviews you and can ingest your CV, LinkedIn, 
 | `/search <query>` | Search job boards for roles matching your profile. |
 | `/track <url>` | Scrape a job listing and save it to the pipeline. |
 | `/apply <id>` | Generate a tailored cover letter + tweaked CV, then mark as applied. |
-| `/pipeline-status` | Pipeline dashboard — see all jobs by stage and get next-action prompts. |
+| `/summarise <id or url>` | Summarise a job listing concisely from its URL or tracked ID. |
+| `/pipeline` | Pipeline dashboard — see all jobs by stage and get next-action prompts. |
 
 ## Files
 
@@ -55,4 +56,5 @@ Dynamically expand this list per search — if a relevant source is discovered m
 2. `/search senior engineer remote` — discover roles
 3. `/track https://example.com/job/123` — save interesting ones
 4. `/apply acme-senior-engineer` — generate materials
-5. `/pipeline-status` — keep on top of your pipeline
+5. `/summarise <id>` — review saved roles before applying
+6. `/pipeline` — keep on top of your pipeline
