@@ -73,9 +73,14 @@ Dynamically expand this list per search — if a relevant source is discovered m
 
 ## Workflow
 
-1. `/build-profile` — one-time setup
-2. `/search senior engineer remote` — discover roles
-3. `/track https://example.com/job/123` — save interesting ones
-4. `/apply acme-senior-engineer` — generate materials
-5. `/summarise <id>` — review saved roles before applying
-6. `/pipeline` — keep on top of your pipeline
+```
+  /build-profile
+       │
+       ▼
+  /search ────▶ /track ────▶ /summarise ────▶ /apply
+                                                 │
+       ◀─────────────────────────────────────────┘
+       │
+       ▼
+  /pipeline
+```
