@@ -1,6 +1,6 @@
 # Job Hunter
 
-OpenCode-powered job hunting toolkit. Commands that build your profile, find jobs, and prepare tailored applications — all persisted as markdown and JSON in this repo.
+Slash commands for searching jobs, applying to them, and tracking your applications — right from your terminal. Built for [OpenCode](https://opencode.ai), and easy to port to Claude Code or GitHub Copilot CLI.
 
 ## Setup
 
