@@ -24,6 +24,9 @@ jobs.json                   # All tracked job listings (JSON array)
 applications/<id>/          # Per-job outputs
   cover-letter.md
   cv.md
+docs/                       # Supporting documents (gitignored)
+  cv.pdf                    # Drop your CV here
+  linkedin-export.pdf       # Drop a LinkedIn export here
 ```
 
 ## Workflow
