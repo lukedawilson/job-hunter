@@ -8,34 +8,107 @@ Display a dashboard of all tracked job applications and flag any needing action.
 
 1. Read `.jobhunterrc` to get the data path. Default to `./data` if not set.
 
-2. Read `<dataPath>/jobs.json`.
+2. Read `<dataPath>/jobs.json` raw content so you can inspect individual job details (notes, description, reason).
 
-2. If empty: "No tracked jobs yet. Run `/find` to search and `/track <url>` to save listings."
+3. Run this node script to parse and group the jobs. Do not manually count or group — rely on the script output for all counts, groups, and warnings. Use `node -e` from the data path:
 
-3. Group jobs by status and display each group:
+```js
+const fs = require("fs");
+const jobs = JSON.parse(fs.readFileSync("jobs.json", "utf8"));
+const now = new Date();
+const daysAgo = (d) => Math.floor((now - new Date(d)) / 86400000);
+
+const groups = { saved: [], applying: [], applied: [], declined: [], interviewing: [], offered: [], rejected: [] };
+for (const j of jobs) {
+  const status = j.status || "saved";
+  if (groups[status]) groups[status].push(j);
+}
+
+const output = { counts: {}, tables: {}, warnings: [], actions: [] };
+
+for (const [status, items] of Object.entries(groups)) {
+  output.counts[status] = items.length;
+  if (items.length === 0) continue;
+
+  const rows = items.map((j, i) => {
+    const d = j.dates || {};
+    const savedDays = d.saved ? daysAgo(d.saved) : null;
+    const appliedDays = d.applied ? daysAgo(d.applied) : null;
+    const closedDays = d.closed ? daysAgo(d.closed) : null;
+
+    let row = {
+      num: i + 1,
+      id: j.id,
+      company: j.company,
+      title: j.title,
+      url: j.url,
+      salary: j.salary,
+      savedDays,
+      appliedDays,
+      closedDays,
+      reason: j.reason,
+      notes: j.notes ? j.notes.slice(0, 200) + (j.notes.length > 200 ? "..." : "") : null,
+    };
+
+    if (status === "saved" && savedDays !== null && savedDays > 7) {
+      output.warnings.push(`Stale saved job: ${j.company} — ${j.title} (${savedDays} days)`);
+    }
+    if (status === "applied" && appliedDays !== null && appliedDays > 14 && !d.last_contact) {
+      output.warnings.push(`No follow-up: ${j.company} — ${j.title} (${appliedDays} days)`);
+    }
+    return row;
+  });
+
+  output.tables[status] = rows;
+}
+
+// Next actions
+const totalSaved = output.counts.saved || 0;
+const totalApplied = output.counts.applied || 0;
+const totalInterviewing = output.counts.interviewing || 0;
+const totalApplying = output.counts.applying || 0;
+
+if (totalSaved + totalApplying + totalApplied + totalInterviewing === 0) {
+  output.actions.push("Run `/search` to discover new roles.");
+}
+if (totalSaved > 0) {
+  output.actions.push(`Run \`/apply <id>\` for your ${totalSaved} saved jobs.`);
+}
+if (totalApplied > 5 && totalInterviewing === 0) {
+  output.actions.push(">5 applications with no interviews — review your CV and cover letter approach.");
+}
+
+console.log(JSON.stringify(output, null, 2));
+```
+
+Run with: `node -e '<the script>'` from `<dataPath>/`. Use the JSON output to populate the dashboard display below. **Never count manually — use the script's `counts` object for all group sizes.**
+
+4. If jobs.json is empty or missing: "No tracked jobs yet. Run `/search` to discover roles and `/track <url>` to save listings."
+
+5. Display the dashboard using the script output:
 
 ```
-## Saved (X jobs)
+## Saved ({counts.saved} jobs)
 | # | Company | Title | Saved | Link |
 |---|---------|-------|-------|------|
 | 1 | Acme    | Sr Eng | 3d ago | [Job](https://...) |
 
-## Applying (X jobs)
+## Applying ({counts.applying} jobs)
 ...
 
-## Applied (X jobs)
+## Applied ({counts.applied} jobs)
 | # | Company | Title | Applied | Waiting | Link |
 |---|---------|-------|---------|---------|------|
 | 3 | Beta    | Lead   | 5d ago  | 5 days  | [Job](https://...) |
+
+## Interviewing ({counts.interviewing} jobs)
+...
 ```
 
-4. **Warnings** — flag issues at the top:
-   - Jobs in `saved` for >7 days: "These jobs are getting stale — apply soon"
-   - Jobs in `applied` for >14 days with no follow-up: "Consider following up on these"
+Include any extra status groups present (declined, offered, rejected) with appropriate columns.
 
-5. **Next actions** section: suggest concrete next steps based on the pipeline state.
-   - If nothing in `applying` or recently tracked: "Run `/find` to discover new roles."
-   - If jobs in `saved`: "Run `/apply <id>` to prepare materials for these."
-   - If >5 in `applied` with no interviews: "Review your CV and cover letter approach — low response rate."
+6. **Warnings** — display any warnings from the script output at the top of the dashboard.
 
-6. At the end, ask if the user wants to update any job statuses (e.g. mark an interview, offer, or rejection).
+7. **Next actions** — display the actions from the script output.
+
+8. At the end, ask if the user wants to update any job statuses.
