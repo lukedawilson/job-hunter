@@ -14,17 +14,19 @@ User query: $ARGUMENTS
 
 3. Build a combined search query from the user's target role titles and any `$ARGUMENTS` keywords.
 
-4. Run the Playwright scraper against each relevant source. Spawn them in parallel. Use `--limit 30 --pages 10` for all sources. If a source returns nothing or few results, try a broader query and re-run:
+4. Run the Playwright scraper against each relevant source. Spawn them in parallel. Use `--limit 30` for all sources. Use `--pages 20` only for sources that support real pagination (WWR via `?page=N`, YC via scroll, Indeed via `&start=N`). Use `--pages 1` for sources that return all results at once (RemoteOK, Remotive, EuroTechJobs, Arc):
 
    ```bash
-   node scripts/scrape.js --source remoteok --query "senior staff principal engineer" --limit 30 --pages 10
-   node scripts/scrape.js --source weworkremotely --query "engineer" --limit 30 --pages 10
-   node scripts/scrape.js --source ycombinator --query "software engineer" --limit 30 --pages 10
-   node scripts/scrape.js --source indeed --query "senior staff principal lead engineer" --limit 30 --pages 10
-   node scripts/scrape.js --source remotive --query "senior staff principal" --limit 30 --pages 10
-   node scripts/scrape.js --source eurotechjobs --query "senior principal c# dotnet" --limit 30 --pages 10
-   node scripts/scrape.js --source arc --query "senior staff principal" --limit 30 --pages 10
+   node scripts/scrape.js --source remoteok --query "senior staff principal engineer" --limit 30 --pages 1
+   node scripts/scrape.js --source weworkremotely --query "engineer" --limit 30 --pages 20
+   node scripts/scrape.js --source ycombinator --query "software engineer" --limit 30 --pages 20
+   node scripts/scrape.js --source indeed --query "senior staff principal lead engineer" --limit 30 --pages 20
+   node scripts/scrape.js --source remotive --query "senior staff principal" --limit 30 --pages 1
+   node scripts/scrape.js --source eurotechjobs --query "senior principal c# dotnet" --limit 30 --pages 1
+   node scripts/scrape.js --source arc --query "senior staff principal" --limit 30 --pages 1
    ```
+
+   If a source returns few results, try a broader query or a different category page and re-run.
 
 5. Merge and deduplicate results (by URL). Filter against the user's preferences from `<dataPath>/profile.md`:
    - **Work model**: if user wants remote-only, skip onsite roles.
