@@ -29,9 +29,9 @@ User query: $ARGUMENTS
    If a source returns few results, try a broader query or a different category page and re-run.
 
 5. Merge and deduplicate results (by URL). Filter against the user's preferences from `<dataPath>/profile.md`:
-   - **Work model**: if user wants remote-only, skip onsite roles.
+   - **Work model**: if user wants remote-only, skip onsite/hybrid roles.
+   - **Location**: skip US-geolocked roles. On Indeed and similar boards, "Remote" typically means "Remote in US" — these are dealbreakers unless the listing explicitly mentions worldwide, Europe, EMEA, or the user's target countries. On WWR and YC, check the actual location field per listing.
    - **Employment type**: if user wants contract/B2B only, skip perm roles unless unclear.
-   - **Location**: only show roles matching target locations or tagged "Remote".
    - **Salary**: if visible and well below the user's minimum, flag it but still show.
    - **Dealbreakers**: skip roles with dealbreaker tech stacks (Ruby on Rails, Java), industries (gambling, military, dating, crypto), or agency roles.
 
