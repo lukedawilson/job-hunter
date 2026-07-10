@@ -1,6 +1,13 @@
 module.exports = {
   name: "Y Combinator Jobs",
 
+  meta: {
+    paginates: true,
+    defaultPages: 20,
+    locationHint: "check_listing",
+    suggestedQuery: "software engineer",
+  },
+
   url: () => "https://www.ycombinator.com/jobs/role/software-engineer",
 
   async search(context, query, limit = 5, page = 0) {

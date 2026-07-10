@@ -1,6 +1,14 @@
 module.exports = {
   name: "Arc",
 
+  meta: {
+    paginates: false,
+    defaultPages: 0,
+    locationHint: "check_listing",
+    suggestedQuery: "senior staff principal",
+    preferFreelance: true,
+  },
+
   url: () => "https://arc.dev/remote-jobs?jobRoles=engineering",
 
   async search(context, query, limit = 5) {

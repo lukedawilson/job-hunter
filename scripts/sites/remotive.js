@@ -1,6 +1,13 @@
 module.exports = {
   name: "Remotive",
 
+  meta: {
+    paginates: false,
+    defaultPages: 0,
+    locationHint: "check_listing",
+    suggestedQuery: "senior staff principal",
+  },
+
   url: () => "https://remotive.com/remote-jobs/software-development",
 
   async search(context, query, limit = 5) {

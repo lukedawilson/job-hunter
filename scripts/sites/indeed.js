@@ -1,6 +1,13 @@
 module.exports = {
   name: "Indeed",
 
+  meta: {
+    paginates: true,
+    defaultPages: 20,
+    locationHint: "us_biased",
+    suggestedQuery: "senior staff principal software engineer",
+  },
+
   url: (query, page = 0) =>
     `https://www.indeed.com/jobs?q=${encodeURIComponent(query)}&sc=0kf%3Aattr(DSQF7)%3B&sort=date&start=${page * 10}`,
 

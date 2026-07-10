@@ -1,6 +1,14 @@
 module.exports = {
   name: "Remote OK",
 
+  meta: {
+    paginates: false,
+    defaultPages: 0,
+    locationHint: "worldwide",
+    suggestedQuery: "senior staff principal engineer",
+    preferFreelance: true,
+  },
+
   url: () => "https://remoteok.com/remote-dev-jobs",
 
   async search(context, query, limit = 5) {

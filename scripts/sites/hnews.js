@@ -1,6 +1,14 @@
 module.exports = {
   name: "Hacker News: Who is hiring?",
 
+  meta: {
+    paginates: false,
+    defaultPages: 1,
+    locationHint: "check_listing",
+    suggestedQuery: "engineer",
+    preferFreelance: false,
+  },
+
   url: () => "https://news.ycombinator.com",
 
   async search(context, query, limit = 5) {

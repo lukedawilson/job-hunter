@@ -1,6 +1,13 @@
 module.exports = {
   name: "EuroTechJobs",
 
+  meta: {
+    paginates: false,
+    defaultPages: 0,
+    locationHint: "check_listing",
+    suggestedQuery: "senior principal c# dotnet",
+  },
+
   url: () => "https://www.eurotechjobs.com/job_search",
 
   async search(context, query, limit = 5) {

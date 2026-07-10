@@ -1,6 +1,13 @@
 module.exports = {
   name: "We Work Remotely",
 
+  meta: {
+    paginates: true,
+    defaultPages: 20,
+    locationHint: "check_listing",
+    suggestedQuery: "engineer",
+  },
+
   url: (query, page = 1) =>
     `https://weworkremotely.com/remote-jobs/search?term=${encodeURIComponent(query)}&page=${page}`,
 
