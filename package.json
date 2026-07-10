@@ -1,6 +1,9 @@
 {
   "name": "job-hunter",
   "private": true,
+  "scripts": {
+    "test": "node --test scripts/lib/extract-profile.test.js scripts/filter-jobs.test.js scripts/find-job.test.js"
+  },
   "dependencies": {
     "playwright": "^1.52.0",
     "playwright-extra": "^4.3.6",

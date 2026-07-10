@@ -10,7 +10,13 @@ Job ID: $ARGUMENTS
 
 1. Read `.jobhunterrc` to get the data path. Default to `./data` if not set.
 
-2. Read `<dataPath>/jobs.json` and find the job with the given ID. If not found, list available job IDs and ask which one.
+2. Find the job by ID using the find-job script. Do not manually scan jobs.json:
+
+   ```bash
+   node scripts/find-job.js --jobs <dataPath>/jobs.json --id $ARGUMENTS
+   ```
+
+   If the output is `null`, list available job IDs with `node scripts/find-job.js --jobs <dataPath>/jobs.json --ids` and ask the user which one.
 3. Read `<dataPath>/profile.md` for the user's skills, experience, and preferences.
 
 4. **Quick copy**: Output these profile links for easy copy-paste into application forms:

@@ -19,18 +19,32 @@ User query: $ARGUMENTS
    - **Query:** use `meta.suggestedQuery` or build from the user's target roles.
    - **Location handling:** `meta.locationHint` tells you how to interpret results. `us_biased` means the source defaults to US remote — verify via detail page fetch. `worldwide` means listed as remote = actually worldwide. `check_listing` means you must check the listing page for country.
 
-   Run all sources in parallel with `--limit 30`:
+    Run all sources in parallel with `--limit 30`, each writing to a temp file:
 
-   ```bash
-   node scripts/scrape.js --source <name> --query "<query>" --limit 30 --pages <N>
-   ```
+    ```bash
+    node scripts/scrape.js --source <name> --query "<query>" --limit 30 --pages <N> > /tmp/jh_search_<name>.json &
+    ```
 
-5. Merge and deduplicate results (by URL). Filter against the user's preferences from `<dataPath>/profile.md`:
-   - **Work model:** skip onsite/hybrid roles.
-   - **Location:** use each source's `meta.locationHint`. Skip explicitly US-geolocked roles. For `us_biased` sources with plain "Remote", fetch the detail page to verify worldwide eligibility.
-   - **Employment type:** skip roles that don't match the user's target type.
-   - **Salary:** flag if well below the user's minimum.
-   - **Dealbreakers:** skip roles with dealbreaker stacks (Ruby on Rails, Java), industries (gambling, military, dating, crypto), or agency roles.
+    After all scrapers finish (`wait`), merge, deduplicate, and filter:
+
+    ```bash
+    node scripts/filter-jobs.js --profile <dataPath>/profile.md /tmp/jh_search_*.json
+    ```
+
+    The script outputs JSON with `results`, `flags`, and `stats`. Do not manually count or filter — use the script output.
+
+5. The filter-jobs script has already handled:
+   - Merge + deduplicate by URL
+   - Remove onsite/hybrid (unless also "remote")
+   - Filter US-geolocked jobs from us_biased sources
+   - Flag us_biased "Remote" jobs for manual verification
+
+   Review the script's `results` array (already pre-filtered) and apply additional profile checks the script cannot do from the thin scraper output. For any `flags`, fetch the detail page for us_biased "Remote" jobs to verify worldwide eligibility.
+
+   Apply these remaining filters against `<dataPath>/profile.md`:
+   - **Dealbreakers:** skip roles mentioning dealbreaker stacks (Ruby on Rails, Java), industries (gambling, military, dating, crypto), or agencies.
+   - **Employment type:** skip roles that don't match if discernible from the title/location.
+   - **Salary:** flag if well below the user's minimum from `<dataPath>/profile.md`.
 
 6. Present results as a numbered table:
 
