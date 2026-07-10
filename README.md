@@ -36,13 +36,11 @@ Your data directory is gitignored. Configure via `.jobhunterrc` (also gitignored
 
 ```json
 {
-  "dataPath": "./data",
-  "searchLimit": 5
+  "dataPath": "./data"
 }
 ```
 
 - `dataPath` — where profiles, jobs, and applications live (default `./data`)
-- `searchLimit` — max results to display per `/search` (default `5`). The scraper fetches generously per source; this caps the final count shown.
 
 ### Keeping your data in a private repo
 
