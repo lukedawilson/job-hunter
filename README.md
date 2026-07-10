@@ -42,7 +42,7 @@ Your data directory is gitignored. Configure via `.jobhunterrc` (also gitignored
 ```
 
 - `dataPath` — where profiles, jobs, and applications live (default `./data`)
-- `searchLimit` — max results per source when running `/search` (default `5`)
+- `searchLimit` — max results to display per `/search` (default `5`). The scraper fetches generously per source; this caps the final count shown.
 
 ### Keeping your data in a private repo
 
@@ -73,11 +73,11 @@ The `/search` command draws from these sources and expands as needed:
 | Hacker News "Who is hiring?" | Monthly threads |
 | Remote OK | Remote-only listings |
 | We Work Remotely | Remote-only listings |
-| Glassdoor Jobs | Broad coverage |
 | Y Combinator Jobs | YC startup listings |
-| Arc | Remote developer jobs |
 | Remotive | Remote tech jobs |
-| European Tech Jobs | EU-focused tech roles |
+| EuroTechJobs | EU-focused tech roles |
+| Glassdoor Jobs | Broad coverage |
+| Arc | Remote developer jobs |
 
 Dynamically expand this list per search — if a relevant source is discovered mid-search, pull from it too.
 
