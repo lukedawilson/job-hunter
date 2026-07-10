@@ -1,7 +1,7 @@
 module.exports = {
   name: "EuroTechJobs",
 
-  url: () => "https://www.eurotechjobs.com/jobs/5+_years_experience",
+  url: () => "https://www.eurotechjobs.com/job_search",
 
   async search(context, query, limit = 5) {
     const page = await context.newPage();
@@ -12,32 +12,37 @@ module.exports = {
     await page.waitForTimeout(3000);
 
     const jobs = await page.$$eval(
-      "a[href*='/job_display/']",
+      "li.premiumJobContainer",
       (items, opts) => {
         const limit = opts.limit;
         const keywords = opts.kw.split(/\s+/).filter((k) => k.length > 1);
         return items
-          .filter((a) => {
-            const text = a.textContent?.trim() ?? "";
-            return text.length > 5;
-          })
-          .map((a) => {
-            const title = a.textContent?.trim() ?? "";
-            const url = a.getAttribute("href") ?? "";
-            const slug = url.split("/").pop() ?? "";
-            const slugParts = slug.split("_");
-            const companyIdx = slugParts.findIndex(
-              (p, i) => i > 2 && /^[A-Z]/.test(p) && p.length > 3
-            );
+          .map((li) => {
+            const h3a = li.querySelector("h3 a[href*='/job_display/']");
+            if (!h3a) return null;
+            const title = h3a.textContent?.trim() ?? "";
+            const text = li.textContent.replace(/\s+/g, " ").trim();
+            const idx = text.indexOf(title);
+            if (idx < 0) return null;
+            const after = text.slice(idx + title.length).trim();
+            const parts = after.split(" ");
+            const commaIdx = parts.findIndex((p) => p.includes(","));
             const company =
-              companyIdx > 0
-                ? slugParts[companyIdx].replace(/-/g, " ")
-                : "";
-            return { title, company, location: "Europe", url: `https://www.eurotechjobs.com${url}` };
+              commaIdx > 0 ? parts.slice(0, commaIdx).join(" ") : parts[0] ?? "";
+            const location =
+              commaIdx > 0 ? parts.slice(commaIdx).join(" ").split(".")[0].trim() : "";
+            return {
+              title,
+              company,
+              location: location || "Europe",
+              url: h3a.href.startsWith("http")
+                ? h3a.href
+                : `https://www.eurotechjobs.com${h3a.getAttribute("href")}`,
+            };
           })
+          .filter(Boolean)
           .filter(
             (j) =>
-              j.title &&
               keywords.some(
                 (k) =>
                   j.title.toLowerCase().includes(k) ||
