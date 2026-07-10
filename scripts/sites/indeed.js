@@ -2,7 +2,7 @@ module.exports = {
   name: "Indeed",
 
   url: (query, page = 0) =>
-    `https://www.indeed.com/jobs?q=${encodeURIComponent(query)}&l=Remote&sort=date&start=${page * 10}`,
+    `https://www.indeed.com/jobs?q=${encodeURIComponent(query)}&sc=0kf%3Aattr(DSQF7)%3B&sort=date&start=${page * 10}`,
 
   async search(context, query, limit = 5, pageNum = 0) {
     const page = await context.newPage();
