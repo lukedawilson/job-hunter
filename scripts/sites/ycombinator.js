@@ -3,17 +3,22 @@ module.exports = {
 
   url: () => "https://www.ycombinator.com/jobs/role/software-engineer",
 
-  async search(context, query, limit = 5) {
-    const page = await context.newPage();
-    await page.goto(this.url(), {
+  async search(context, query, limit = 5, page = 0) {
+    const pageCtx = await context.newPage();
+    await pageCtx.goto(this.url(), {
       waitUntil: "domcontentloaded",
       timeout: 15000,
     });
-    await page.waitForTimeout(3000);
+    await pageCtx.waitForTimeout(2000);
+
+    for (let i = 0; i < page; i++) {
+      await pageCtx.evaluate(() => window.scrollBy(0, document.body.scrollHeight));
+      await new Promise((r) => setTimeout(r, 1000));
+    }
 
     const keywords = query.toLowerCase().split(/\s+/);
 
-    const jobs = await page.$$eval(
+    const jobs = await pageCtx.$$eval(
       'a[href*="/companies/"][href*="/jobs/"]',
       (items, opts) => {
         const keywords = opts.kw.split(",");
@@ -49,7 +54,7 @@ module.exports = {
       { kw: keywords.join(","), limit }
     );
 
-    await page.close();
+    await pageCtx.close();
     return jobs;
   },
 };

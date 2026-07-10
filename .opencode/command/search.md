@@ -17,13 +17,15 @@ User query: $ARGUMENTS
 4. Run the Playwright scraper against each relevant source. Spawn them in parallel. The scraper fetches generously (use `--limit 30` internally) — `searchLimit` from `.jobhunterrc` is the **final displayed count**, not the scraper fetch size:
 
    ```bash
-   node scripts/scrape.js --source remoteok --query "senior engineer remote" --limit 30
-   node scripts/scrape.js --source weworkremotely --query "principal engineer" --limit 30
-   node scripts/scrape.js --source hnews --query "c# engineer" --limit 30
-   node scripts/scrape.js --source ycombinator --query "agentic engineer" --limit 30
-   node scripts/scrape.js --source remotive --query "staff senior principal" --limit 30
-   node scripts/scrape.js --source eurotechjobs --query "senior principal c# dotnet" --limit 30
+   node scripts/scrape.js --source remoteok --query "senior engineer remote" --limit 30 --pages 1
+   node scripts/scrape.js --source weworkremotely --query "engineer" --limit 30 --pages 3
+   node scripts/scrape.js --source ycombinator --query "software engineer" --limit 30 --pages 3
+   node scripts/scrape.js --source remotive --query "senior staff principal" --limit 30 --pages 1
+   node scripts/scrape.js --source eurotechjobs --query "senior principal c# dotnet" --limit 30 --pages 1
+   node scripts/scrape.js --source arc --query "senior staff principal" --limit 30 --pages 1
    ```
+
+   Use `--pages 3` for sources that support pagination (WWR via `?page=N`, YC via scroll). Use `--pages 1` for sources that return all results at once (RemoteOK, Remotive, EuroTechJobs, Arc).
 
    Run at least 4-5 sources per search. Vary the query per source — some boards use keyword search, others browse. Add new sources if discovered mid-search.
 

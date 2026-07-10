@@ -22,7 +22,7 @@ async function loadSite(name) {
   }
 }
 
-async function scrape(source, query, limit) {
+async function scrape(source, query, limit, pages = 1) {
   const site = await loadSite(source);
 
   const browser = await chromium.launch({ headless: true });
@@ -34,8 +34,19 @@ async function scrape(source, query, limit) {
   });
 
   try {
-    const jobs = await site.search(context, query, limit);
-    return jobs.filter((j) => j.title);
+    const allJobs = [];
+    const seen = new Set();
+    for (let p = 0; p < pages; p++) {
+      const jobs = await site.search(context, query, limit, p);
+      for (const j of jobs) {
+        if (j.title && !seen.has(j.url)) {
+          seen.add(j.url);
+          allJobs.push(j);
+        }
+      }
+      if (jobs.length === 0) break;
+    }
+    return allJobs.slice(0, pages * limit);
   } finally {
     await context.close();
     await browser.close();
@@ -51,13 +62,14 @@ async function scrape(source, query, limit) {
   const source = getArg("--source");
   const query = getArg("--query");
   const limit = parseInt(getArg("--limit")) || 5;
+  const pages = parseInt(getArg("--pages")) || 1;
   if (!source || !query) {
-    console.error("Usage: node scripts/scrape.js --source <src> --query <q> [--limit <n>]");
+    console.error("Usage: node scripts/scrape.js --source <src> --query <q> [--limit <n>] [--pages <n>]");
     process.exit(1);
   }
 
   try {
-    const jobs = await scrape(source, query, limit);
+    const jobs = await scrape(source, query, limit, pages);
     console.log(JSON.stringify(jobs));
   } catch (e) {
     console.error(`Scrape failed for ${source}: ${e.message}`);

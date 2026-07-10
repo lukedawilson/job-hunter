@@ -1,12 +1,12 @@
 module.exports = {
   name: "We Work Remotely",
 
-  url: (query) =>
-    `https://weworkremotely.com/remote-jobs/search?term=${encodeURIComponent(query)}`,
+  url: (query, page = 1) =>
+    `https://weworkremotely.com/remote-jobs/search?term=${encodeURIComponent(query)}&page=${page}`,
 
-  async search(context, query, limit = 5) {
+  async search(context, query, limit = 5, pageNum = 0) {
     const page = await context.newPage();
-    await page.goto(this.url(query), {
+    await page.goto(this.url(query, pageNum + 1), {
       waitUntil: "domcontentloaded",
       timeout: 15000,
     });
