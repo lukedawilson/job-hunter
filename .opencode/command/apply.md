@@ -35,6 +35,6 @@ Job ID: $ARGUMENTS
 
    You may suggest 1-3 tweaks only if this role is genuinely different from the user's typical target roles and warrants special attention (e.g. it's a Rust role in an otherwise TypeScript/C# profile, or it asks for a niche skill the user has but hasn't surfaced). Do not suggest tweaks for routine applications — the base CV is tuned for the user's target roles already.
 
-9. **Summary**: Present what was found and created. Ask: "Mark this job as applied? (y/n)". Only update `<dataPath>/jobs.json` if they confirm.
+9. **Summary**: Present what was found and created, including the job title, company, and URL. Ask: "Mark this job as applied? (y/n)". Only update `<dataPath>/jobs.json` if they confirm.
 
 10. If confirmed, change the job's status to `"applied"` and set `dates.applied` to today's date. Then present: "Application materials ready in `<dataPath>/applications/<id>/`. Job marked as applied. Run `/pipeline` to see your pipeline."
