@@ -1,4 +1,19 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "instructions": ["README.md", "profile.md"]
+  "instructions": ["README.md", "profile.md"],
+  "mcp": {
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer {env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    }
+  },
+  "permission": {
+    "edit": "allow",
+    "bash": "allow",
+    "external_directory": "allow"
+  }
 }

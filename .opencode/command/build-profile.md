@@ -38,11 +38,13 @@ Work through the sections below. Ask questions conversationally, not all at once
 ### 5. Preferences
 - Target role titles (be specific)
 - Industries of interest
-- Salary expectation (range or minimum)
-- Remote / hybrid / onsite preference
-- Location constraints (must be in X city, willing to relocate, etc.)
+- Employment type: employee (perm), contractor, B2B contract, or open to any
+- Work model: remote, hybrid, onsite
+- Current location (city/country)
+- Where you're willing to work (specific cities, countries, or "remote anywhere")
+- Salary expectation: range, currency (GBP/USD/EUR/etc.)
 - Company size preference (startup / mid / large)
-- Any dealbreakers (e.g. no defence, no crypto)
+- Any dealbreakers (e.g. no defence, no crypto, no agencies)
 
 ## Writing the file
 
