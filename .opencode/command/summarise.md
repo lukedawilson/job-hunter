@@ -2,15 +2,17 @@
 description: Summarise a job listing — pass a job ID or URL
 ---
 
-Summarise a job listing concisely. Accepts a job ID from `jobs.json` or a raw URL.
+Summarise a job listing concisely. Accepts a job ID from the pipeline or a raw URL.
 
 Input: $ARGUMENTS
 
 ## Process
 
-1. If the input matches a job ID in `jobs.json` (check the `id` field), fetch from that job's `url`. Otherwise treat the input as a URL directly.
+1. Read `.jobhunterrc` to get the data path. Default to `./data` if not set.
 
-2. Fetch the URL with `webfetch`. If it returns empty/skeleton content, fall back to the stored `description` in `jobs.json` (if from a tracked job).
+2. If the input matches a job ID in `<dataPath>/jobs.json` (check the `id` field), fetch from that job's `url`. Otherwise treat the input as a URL directly.
+
+3. Fetch the URL with `webfetch`. If it returns empty/skeleton content, fall back to the stored `description` in `<dataPath>/jobs.json` (if from a tracked job).
 
 3. From the content, extract and display a concise summary:
 
@@ -37,4 +39,4 @@ Input: $ARGUMENTS
 <comma-separated tags: tech stack, domains, seniority>
 ```
 
-4. If the job is already tracked in `jobs.json`, also show its current pipeline status and dates.
+5. If the job is already tracked in `<dataPath>/jobs.json`, also show its current pipeline status and dates.

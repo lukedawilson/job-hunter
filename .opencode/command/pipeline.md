@@ -6,7 +6,9 @@ Display a dashboard of all tracked job applications and flag any needing action.
 
 ## Process
 
-1. Read `jobs.json`.
+1. Read `.jobhunterrc` to get the data path. Default to `./data` if not set.
+
+2. Read `<dataPath>/jobs.json`.
 
 2. If empty: "No tracked jobs yet. Run `/find` to search and `/track <url>` to save listings."
 

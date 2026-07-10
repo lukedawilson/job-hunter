@@ -2,15 +2,17 @@
 description: Track a job by scraping its listing URL
 ---
 
-Save a job listing to `jobs.json` for tracking through the application pipeline.
+Save a job listing to the pipeline for tracking through the application process.
 
 URL: $ARGUMENTS
 
 ## Process
 
-1. First try `webfetch` on the URL. If the result contains the job description, use it.
+1. Read `.jobhunterrc` to get the data path. Default to `./data` if not set.
 
-2. If webfetch returns empty/skeleton content (JS-rendered page), use Playwright with stealth:
+2. First try `webfetch` on the URL. If the result contains the job description, use it.
+
+3. If webfetch returns empty/skeleton content (JS-rendered page), use Playwright with stealth:
 
    ```bash
    node -e "
@@ -31,13 +33,13 @@ URL: $ARGUMENTS
    "
    ```
 
-3. From the extracted text, identify: title, company, location, description, salary (if present).
+5. From the extracted text, identify: title, company, location, description, salary (if present).
 
-4. Generate a slug ID from company + title: lowercase, hyphens, no special chars. e.g. `acme-senior-engineer`.
+6. Generate a slug ID from company + title: lowercase, hyphens, no special chars. e.g. `acme-senior-engineer`.
 
-5. Check `jobs.json` — if a job with this ID already exists, warn the user and ask if they want to update it.
+7. Check `<dataPath>/jobs.json` — if a job with this ID already exists, warn the user and ask if they want to update it.
 
-6. Build the job entry and append to the `jobs.json` array:
+8. Build the job entry and append to the `<dataPath>/jobs.json` array:
 
    ```json
    {
@@ -59,6 +61,6 @@ URL: $ARGUMENTS
    }
    ```
 
-7. Confirm: "Tracked: **[Company] — [Title]**. Run `/apply [id]` when you're ready."
+9. Confirm: "Tracked: **[Company] — [Title]**. Run `/apply [id]` when you're ready."
 
 If both webfetch and Playwright fail (bot block, 403, etc.), tell the user and ask them to paste the job description manually.

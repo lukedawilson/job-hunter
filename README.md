@@ -4,7 +4,7 @@ OpenCode-powered job hunting toolkit. Commands that build your profile, find job
 
 ## Setup
 
-Run `/build-profile` first. It interviews you and can ingest your CV, LinkedIn, and GitHub to populate `profile.md`.
+Run `/build-profile` first. It interviews you and can ingest your CV, LinkedIn, and GitHub to populate your profile. On first run, you'll be asked where to store your data (default: `./data`).
 
 ## Commands
 
@@ -20,15 +20,36 @@ Run `/build-profile` first. It interviews you and can ingest your CV, LinkedIn, 
 ## Files
 
 ```
-profile.md                  # Your profile (skills, experience, preferences)
-jobs.json                   # All tracked job listings (JSON array)
-applications/<id>/          # Per-job outputs
-  cover-letter.md
-  cv.md
-docs/                       # Supporting documents
+<dataPath>/
+  profile.md                # Your profile (skills, experience, preferences)
+  jobs.json                 # All tracked job listings (JSON array)
+  applications/<id>/        # Per-job outputs
+    cover-letter.md
+    cv.md
   cv.pdf                    # Drop your CV here
   linkedin-export.pdf       # Drop a LinkedIn export here
+docs/                       # Project documentation
+  architecture/             # Architecture Decision Records
 ```
+
+Your data directory is gitignored. Set the path in `.jobhunterrc` (also gitignored).
+
+### Keeping your data in a private repo
+
+Your profile, jobs, and applications are personal — keep them in a separate private repo so the tool repo stays clean and shareable:
+
+```bash
+# 1. Create a private repo on GitHub (e.g. job-hunter-data)
+# 2. Inside the tool repo, initialize your data directory as a git repo:
+cd data
+git init
+git remote add origin https://github.com/you/job-hunter-data.git
+git add -A
+git commit -m "Initial personal data"
+git push -u origin main
+```
+
+The `data/` directory stays gitignored by the tool repo — only your private data repo tracks it. On a new machine, just `git clone` your data repo into `./data`.
 
 ## Sources
 
