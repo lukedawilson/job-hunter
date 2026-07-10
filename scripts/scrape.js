@@ -22,7 +22,7 @@ async function loadSite(name) {
   }
 }
 
-async function scrape(source, query) {
+async function scrape(source, query, limit) {
   const site = await loadSite(source);
 
   const browser = await chromium.launch({ headless: true });
@@ -34,7 +34,7 @@ async function scrape(source, query) {
   });
 
   try {
-    const jobs = await site.search(context, query);
+    const jobs = await site.search(context, query, limit);
     return jobs.filter((j) => j.title);
   } finally {
     await context.close();
@@ -44,17 +44,20 @@ async function scrape(source, query) {
 
 (async () => {
   const args = process.argv.slice(2);
-  const srcIdx = args.indexOf("--source");
-  const qIdx = args.indexOf("--query");
-  if (srcIdx === -1 || qIdx === -1) {
-    console.error("Usage: node scripts/scrape.js --source <src> --query <q>");
+  const getArg = (flag) => {
+    const i = args.indexOf(flag);
+    return i === -1 ? null : args[i + 1];
+  };
+  const source = getArg("--source");
+  const query = getArg("--query");
+  const limit = parseInt(getArg("--limit")) || 5;
+  if (!source || !query) {
+    console.error("Usage: node scripts/scrape.js --source <src> --query <q> [--limit <n>]");
     process.exit(1);
   }
-  const source = args[srcIdx + 1];
-  const query = args[qIdx + 1];
 
   try {
-    const jobs = await scrape(source, query);
+    const jobs = await scrape(source, query, limit);
     console.log(JSON.stringify(jobs));
   } catch (e) {
     console.error(`Scrape failed for ${source}: ${e.message}`);

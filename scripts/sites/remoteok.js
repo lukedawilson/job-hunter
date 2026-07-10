@@ -3,7 +3,7 @@ module.exports = {
 
   url: () => "https://remoteok.com/remote-dev-jobs",
 
-  async search(context, query) {
+  async search(context, query, limit = 5) {
     const page = await context.newPage();
     await page.goto(this.url(), {
       waitUntil: "domcontentloaded",
@@ -24,7 +24,7 @@ module.exports = {
       .filter((j) =>
         keywords.some((kw) => j.position.toLowerCase().includes(kw))
       )
-      .slice(0, 15)
+      .slice(0, limit)
       .map((j) => ({
         title: j.position,
         company: j.company,

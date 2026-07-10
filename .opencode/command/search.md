@@ -8,19 +8,19 @@ User query: $ARGUMENTS
 
 ## Process
 
-1. Read `.jobhunterrc` to get the data path. Default to `./data` if not set.
+1. Read `.jobhunterrc` to get the data path and `searchLimit`. Default to `./data` and limit 5 if not set.
 
 2. Read `<dataPath>/profile.md` to understand the user's target roles, skills, location, employment type, work model, and salary expectations.
 
 3. Build a combined search query from the user's target role titles and any `$ARGUMENTS` keywords.
 
-4. Run the Playwright scraper against each relevant source. Spawn them in parallel with rate limiting between sources:
+4. Run the Playwright scraper against each relevant source. Spawn them in parallel with rate limiting between sources. Pass `--limit` from `.jobhunterrc` `searchLimit` (default 5):
 
    ```bash
-   node scripts/scrape.js --source remoteok --query "senior engineer remote"
-   node scripts/scrape.js --source weworkremotely --query "principal engineer"
-   node scripts/scrape.js --source hnews --query "c# engineer"
-   node scripts/scrape.js --source ycombinator --query "agentic engineer"
+   node scripts/scrape.js --source remoteok --query "senior engineer remote" --limit 5
+   node scripts/scrape.js --source weworkremotely --query "principal engineer" --limit 5
+   node scripts/scrape.js --source hnews --query "c# engineer" --limit 5
+   node scripts/scrape.js --source ycombinator --query "agentic engineer" --limit 5
    ```
 
    Run at least 3-4 sources per search. Vary the query per source — some boards use keyword search, others browse. Add new sources if discovered mid-search.

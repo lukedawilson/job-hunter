@@ -3,7 +3,7 @@ module.exports = {
 
   url: () => "https://news.ycombinator.com",
 
-  async search(context, query) {
+  async search(context, query, limit = 5) {
     const page = await context.newPage();
 
     const resp = await page.evaluate(async () => {
@@ -37,7 +37,7 @@ module.exports = {
           (kw) => kw.length > 2 && text.toLowerCase().includes(kw)
         )
       )
-      .slice(0, 10)
+      .slice(0, limit)
       .map((text) => {
         const firstLine = text.split("\n")[0].trim();
         return {

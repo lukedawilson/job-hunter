@@ -3,7 +3,7 @@ module.exports = {
 
   url: () => "https://www.ycombinator.com/jobs/role/software-engineer",
 
-  async search(context, query) {
+  async search(context, query, limit = 5) {
     const page = await context.newPage();
     await page.goto(this.url(), {
       waitUntil: "domcontentloaded",
@@ -15,8 +15,9 @@ module.exports = {
 
     const jobs = await page.$$eval(
       'a[href*="/companies/"][href*="/jobs/"]',
-      (items, kw) => {
-        const keywords = kw.split(",");
+      (items, opts) => {
+        const keywords = opts.kw.split(",");
+        const limit = opts.limit;
         return items
           .map((a) => {
             const href = a.getAttribute("href") ?? "";
@@ -43,9 +44,9 @@ module.exports = {
                   j.company.toLowerCase().includes(k)
               )
           )
-          .slice(0, 15);
+          .slice(0, limit);
       },
-      keywords.join(",")
+      { kw: keywords.join(","), limit }
     );
 
     await page.close();

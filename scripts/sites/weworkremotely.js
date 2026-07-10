@@ -4,7 +4,7 @@ module.exports = {
   url: (query) =>
     `https://weworkremotely.com/remote-jobs/search?term=${encodeURIComponent(query)}`,
 
-  async search(context, query) {
+  async search(context, query, limit = 5) {
     const page = await context.newPage();
     await page.goto(this.url(query), {
       waitUntil: "domcontentloaded",
@@ -12,9 +12,11 @@ module.exports = {
     });
     await page.waitForTimeout(3000);
 
-    const jobs = await page.$$eval("section.jobs article ul li", (items) =>
-      items
-        .map((li) => {
+    const jobs = await page.$$eval(
+      "section.jobs article ul li",
+      (items, limit) =>
+        items
+          .map((li) => {
           const link = li.querySelector("a.listing-link--unlocked");
           if (!link) return null;
           const href = link.getAttribute("href") ?? "";
@@ -40,8 +42,8 @@ module.exports = {
           };
         })
         .filter(Boolean)
-        .slice(0, 15)
-    );
+        .slice(0, limit)
+    , limit);
 
     await page.close();
     return jobs;

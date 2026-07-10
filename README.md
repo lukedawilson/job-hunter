@@ -32,7 +32,17 @@ docs/                       # Project documentation
   architecture/             # Architecture Decision Records
 ```
 
-Your data directory is gitignored. Set the path in `.jobhunterrc` (also gitignored).
+Your data directory is gitignored. Configure via `.jobhunterrc` (also gitignored):
+
+```json
+{
+  "dataPath": "./data",
+  "searchLimit": 5
+}
+```
+
+- `dataPath` — where profiles, jobs, and applications live (default `./data`)
+- `searchLimit` — max results per source when running `/search` (default `5`)
 
 ### Keeping your data in a private repo
 
