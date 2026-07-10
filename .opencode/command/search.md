@@ -14,28 +14,23 @@ User query: $ARGUMENTS
 
 3. Build a combined search query from the user's target role titles and any `$ARGUMENTS` keywords.
 
-4. Run the Playwright scraper against each relevant source. Spawn them in parallel. Use `--limit 30` for all sources. Use `--pages 20` only for sources that support real pagination (WWR via `?page=N`, YC via scroll, Indeed via `&start=N`). Use `--pages 1` for sources that return all results at once (RemoteOK, Remotive, EuroTechJobs, Arc):
+4. For each source, read its `meta` from `scripts/sites/<name>.js` to determine:
+   - **Pagination:** if `meta.paginates` is true, use `--pages <meta.defaultPages>` (20). Otherwise use `--pages 1`.
+   - **Query:** use `meta.suggestedQuery` or build from the user's target roles.
+   - **Location handling:** `meta.locationHint` tells you how to interpret results. `us_biased` means the source defaults to US remote — verify via detail page fetch. `worldwide` means listed as remote = actually worldwide. `check_listing` means you must check the listing page for country.
+
+   Run all sources in parallel with `--limit 30`:
 
    ```bash
-   node scripts/scrape.js --source remoteok --query "senior staff principal engineer" --limit 30 --pages 1
-   node scripts/scrape.js --source weworkremotely --query "engineer" --limit 30 --pages 20
-   node scripts/scrape.js --source ycombinator --query "software engineer" --limit 30 --pages 20
-    node scripts/scrape.js --source indeed --query "senior staff principal software engineer" --limit 30 --pages 20
-    node scripts/scrape.js --source remotive --query "senior staff principal" --limit 30 --pages 1
-    node scripts/scrape.js --source eurotechjobs --query "senior principal c# dotnet" --limit 30 --pages 1
-    node scripts/scrape.js --source arc --query "senior staff principal" --limit 30 --pages 1
-    ```
-
-    If the last page still returns new results, increase `--pages` and re-run until results stop flowing.
-
-   If a source returns few results, try a broader query or a different category page and re-run.
+   node scripts/scrape.js --source <name> --query "<query>" --limit 30 --pages <N>
+   ```
 
 5. Merge and deduplicate results (by URL). Filter against the user's preferences from `<dataPath>/profile.md`:
-   - **Work model**: if user wants remote-only, skip onsite/hybrid roles.
-   - **Location**: skip explicitly US-geolocked roles ("Remote in <US city>", "Remote - US", "Fully Remote - US", etc). Plain "Remote" without a country qualifier is fine — treat as potentially worldwide. For such roles from Indeed/WWR, fetch the detail page to verify worldwide eligibility before presenting. For WWR and YC, check each listing's actual location/country tags.
-   - **Employment type**: if user wants contract/B2B only, skip perm roles unless unclear.
-   - **Salary**: if visible and well below the user's minimum, flag it but still show.
-   - **Dealbreakers**: skip roles with dealbreaker tech stacks (Ruby on Rails, Java), industries (gambling, military, dating, crypto), or agency roles.
+   - **Work model:** skip onsite/hybrid roles.
+   - **Location:** use each source's `meta.locationHint`. Skip explicitly US-geolocked roles. For `us_biased` sources with plain "Remote", fetch the detail page to verify worldwide eligibility.
+   - **Employment type:** skip roles that don't match the user's target type.
+   - **Salary:** flag if well below the user's minimum.
+   - **Dealbreakers:** skip roles with dealbreaker stacks (Ruby on Rails, Java), industries (gambling, military, dating, crypto), or agency roles.
 
 6. Present results as a numbered table:
 
