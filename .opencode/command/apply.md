@@ -2,7 +2,7 @@
 description: Inspect the application form and draft tailored answers.
 ---
 
-Inspect the job's application form and draft tailored answers. Fall back to a cover letter only if the form can't be inspected.
+Inspect the job's application form, draft tailored answers, and generate a cover letter.
 
 Job ID: $ARGUMENTS
 
@@ -21,15 +21,12 @@ Job ID: $ARGUMENTS
 5. **Inspect the application form**: Fetch the job URL with a headless browser (Playwright). Look for:
    - An "Apply" button or link — click it if found, then inspect the resulting form/modal/page.
    - Any custom questions the form asks (e.g. "Tell me about a time when...", "Why do you want to work here?", "What's your salary expectation?", "Describe your experience with X", etc.).
-   - Whether a cover letter upload or text field is explicitly requested.
+   - The cover letter upload field or text area for pasting it in.
    - Other notable fields: visa requirements, start date, referral source, portfolio links.
 
 6. **Draft answers**: For each custom question found, draft a concise, specific answer drawing from the user's profile. Save all answers to `<dataPath>/applications/<id>/application-answers.md`. Match the company's tone. Be honest — don't fabricate experience. Keep each answer to 2-4 sentences unless the question clearly demands more.
 
-7. **Cover letter (conditional)**: Only write a cover letter if:
-   - The application form explicitly asks for one, OR
-   - You were unable to inspect the form (e.g. blocked by auth wall).
-               If written, save to `<dataPath>/applications/<id>/cover-letter.md`. Address the hiring manager, map specific experience to the role, keep it 250-350 words.
+7. **Cover letter (always generated)**: Write a cover letter and save to `<dataPath>/applications/<id>/cover-letter.md`. Address the hiring manager, map specific experience to the role, keep it 250-350 words. If the form doesn't have a dedicated cover letter field, the letter still serves as preparation for interview talking points.
 
 8. **CV suitability check**: Decide if the base CV in `<dataPath>/profile.md` is a good fit for this role. If it is, say: "CV is suitable for this role — no changes needed." If it isn't, flag it plainly: "CV is a poor match for this role — [one sentence explaining why]."
 
