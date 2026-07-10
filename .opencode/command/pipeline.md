@@ -36,13 +36,20 @@ for (const [status, items] of Object.entries(groups)) {
     const appliedDays = d.applied ? daysAgo(d.applied) : null;
     const closedDays = d.closed ? daysAgo(d.closed) : null;
 
-    const headline = j.notes
-      ? j.notes
+    const trunc = (s, n) => s.length > n ? s.slice(0, n).replace(/\s+\S*$/, "") : s;
+
+    const fitHeadline = j.notes
+      ? trunc(j.notes
           .replace(/^(PERFECT MATCH|EXCELLENT MATCH|STRONG MATCH|GREAT MATCH|Decent match|EXCELLENT SALARY)\s*\([^)]*\)[.!]\s*/i, "")
           .replace(/^(PERFECT MATCH|EXCELLENT MATCH|STRONG MATCH|GREAT MATCH|Decent match|EXCELLENT SALARY)[.!]\s*/i, "")
-          .split(/[.!]\s+/)[0]
-          .slice(0, 80)
+          .split(/[.!]\s+/)[0], 55)
       : null;
+
+    const companyBlurb = j.description
+      ? trunc(j.description.split(/[.!]\s+/)[0], 65)
+      : null;
+
+    const headline = [companyBlurb, fitHeadline].filter(Boolean).join("; ");
 
     let row = {
       num: i + 1,
@@ -98,7 +105,7 @@ Run with: `node -e '<the script>'` from `<dataPath>/`. Use the JSON output to po
 
 ```
 ## Saved ({counts.saved} jobs)
-| # | Company | Title | Summary | Saved | Link |
+| # | Company | Title | Headline | Saved | Link |
 |---|---------|-------|---------|-------|------|
 | 1 | Acme    | Sr Eng | German health-tech startup | 3d ago | [Job](https://...) |
 
@@ -106,7 +113,7 @@ Run with: `node -e '<the script>'` from `<dataPath>/`. Use the JSON output to po
 ...
 
 ## Applied ({counts.applied} jobs)
-| # | Company | Title | Summary | Applied | Waiting | Link |
+| # | Company | Title | Headline | Applied | Waiting | Link |
 |---|---------|-------|---------|---------|---------|------|
 | 3 | Beta    | Lead   | Fintech platform scaling infra | 5d ago  | 5 days  | [Job](https://...) |
 
