@@ -1,8 +1,8 @@
 ---
-description: Prepare a tailored cover letter and CV for a tracked job
+description: Generate a tailored cover letter and CV tweaks for a job, then mark it as applied.
 ---
 
-Generate a tailored cover letter and tweaked CV for a specific job, then mark it as applied.
+Generate a tailored cover letter and CV tweaks for a specific job, then mark it as applied.
 
 Job ID: $ARGUMENTS
 
@@ -18,12 +18,13 @@ Job ID: $ARGUMENTS
    - Closing: call to action, availability for interview
    - Keep it concise (250-350 words)
 
-4. **CV tweak**: Create a version of the CV saved to `applications/<id>/cv.md`.
-   - Start from the base CV / experience in `profile.md`
-   - Reorder and emphasise skills/experience most relevant to this role
-   - Add keywords from the job description naturally
-   - Do NOT fabricate experience — only reorder and rephrase what's in the profile
+4. **CV tweaks**: Output a bullet list of specific, actionable changes to the base CV in `profile.md`. Show these in the terminal — do NOT write a file. Each delta should be concrete enough to apply immediately:
+   - "Reorder: move [role] to the top of Experience"
+   - "Emphasise: add [skill/keyword] to Summary"
+   - "Add keyword: [term] to [section]"
+   - "Trim: remove or shrink [role] — less relevant to this job"
+   - Do NOT fabricate experience — only reorder, emphasise, or rephrase what's in the profile
 
-5. **Update job status**: Change the job's status to `"applied"` and set `dates.applied` to today's date in `jobs.json`.
+5. Ask the user: "Mark this job as applied? (y/n)" before updating `jobs.json`. Only update if they confirm.
 
-6. Present a summary: "Cover letter and tweaked CV ready in `applications/<id>/`. Job marked as applied. Run `/status` to see your pipeline."
+6. If confirmed, change the job's status to `"applied"` and set `dates.applied` to today's date. Then present: "Cover letter ready in `applications/<id>/`. Job marked as applied. Run `/pipeline-status` to see your pipeline."

@@ -35,9 +35,9 @@ User query: $ARGUMENTS
 6. Present results as a numbered table:
 
    ```
-   | # | Title | Company | Location | Remote? | Salary | Source |
-   |---|-------|---------|----------|---------|--------|--------|
-   | 1 | ...   | ...     | ...      | ...     | ...    | ...    |
+   | # | Title | Company | Location | Remote? | Salary | Source | Link |
+   |---|-------|---------|----------|---------|--------|--------|------|
+   | 1 | ...   | ...     | ...      | ...     | ...    | ...    | [Job](https://...) |
    ```
 
 7. Below the table, show a brief summary of each role (1-2 lines). Flag low-salary or dealbreaker-adjacent roles.

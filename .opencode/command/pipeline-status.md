@@ -14,17 +14,17 @@ Display a dashboard of all tracked job applications and flag any needing action.
 
 ```
 ## Saved (X jobs)
-| # | Company | Title | Saved |
-|---|---------|-------|-------|
-| 1 | Acme    | Sr Eng | 3d ago |
+| # | Company | Title | Saved | Link |
+|---|---------|-------|-------|------|
+| 1 | Acme    | Sr Eng | 3d ago | [Job](https://...) |
 
 ## Applying (X jobs)
 ...
 
 ## Applied (X jobs)
-| # | Company | Title | Applied | Waiting |
-|---|---------|-------|---------|---------|
-| 3 | Beta    | Lead   | 5d ago  | 5 days  |
+| # | Company | Title | Applied | Waiting | Link |
+|---|---------|-------|---------|---------|------|
+| 3 | Beta    | Lead   | 5d ago  | 5 days  | [Job](https://...) |
 ```
 
 4. **Warnings** — flag issues at the top:
