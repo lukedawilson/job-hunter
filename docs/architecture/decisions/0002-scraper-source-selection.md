@@ -37,12 +37,6 @@ We have 7 functioning scrapers (remoteok, weworkremotely, ycombinator, hnews, re
 | **Wellfound (AngelList)** | **Rejected** | Network-level block (`ERR_ABORTED` in Playwright). Likely Cloudflare or similar WAF blocking headless browsers |
 | **Indeed RSS** | **Rejected** | 404 on `rss.indeed.com/rss?q=...`. RSS feed URL pattern is either deprecated or requires different parameters. Switched to HTML scraping instead, which works |
 
-### Technical patterns
-
-- **Pagination support:** `scrape.js` accepts `--pages N`. It loops 0..N-1, calling `site.search(context, query, limit, pageNum)` and deduplicating by URL. Sites that don't support pagination receive `pageNum=0` and return a single batch.
-- **Limit semantics:** `--limit` controls results per page. The `searchLimit` in `.jobhunterrc` controls the final displayed count. Scrapers fetch generously (30/page) and the command filters down.
-- **Anti-detection:** All Playwright scrapers use `playwright-extra` + `puppeteer-extra-plugin-stealth`. Per-source context isolation. Realistic viewport, locale, and user agent.
-
 ### Architecture
 
 ```
