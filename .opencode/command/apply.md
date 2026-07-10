@@ -1,8 +1,8 @@
 ---
-description: Generate a tailored cover letter and CV tweaks for a job, then mark it as applied.
+description: Inspect the application form and draft tailored answers.
 ---
 
-Generate a tailored cover letter and CV tweaks for a specific job, then mark it as applied.
+Inspect the job's application form and draft tailored answers. Fall back to a cover letter only if the form can't be inspected.
 
 Job ID: $ARGUMENTS
 
@@ -16,20 +16,26 @@ Job ID: $ARGUMENTS
    - GitHub: (from `profile.md`)
    - Personal site / blog: (from `profile.md`)
 
-4. **Cover letter**: Write a tailored cover letter saved to `applications/<id>/cover-letter.md`.
-   - Address the hiring manager (use "Hiring Manager" if name unknown)
-   - Opening: which role you're applying for and why you're excited
-   - Body: map your specific experience to their requirements — use concrete examples from your profile that match the job description
-   - Closing: call to action, availability for interview
-   - Keep it concise (250-350 words)
+4. **Inspect the application form**: Fetch the job URL with a headless browser (Playwright). Look for:
+   - An "Apply" button or link — click it if found, then inspect the resulting form/modal/page.
+   - Any custom questions the form asks (e.g. "Tell me about a time when...", "Why do you want to work here?", "What's your salary expectation?", "Describe your experience with X", etc.).
+   - Whether a cover letter upload or text field is explicitly requested.
+   - Other notable fields: visa requirements, start date, referral source, portfolio links.
 
-5. **CV tweaks**: Output a bullet list of specific, actionable changes to the base CV in `profile.md`. Show these in the terminal — do NOT write a file. Each delta should be concrete enough to apply immediately:
+5. **Draft answers**: For each custom question found, draft a concise, specific answer drawing from the user's profile. Save all answers to `applications/<id>/application-answers.md`. Match the company's tone. Be honest — don't fabricate experience. Keep each answer to 2-4 sentences unless the question clearly demands more.
+
+6. **Cover letter (conditional)**: Only write a cover letter if:
+   - The application form explicitly asks for one, OR
+   - You were unable to inspect the form (e.g. blocked by auth wall).
+   If written, save to `applications/<id>/cover-letter.md`. Address the hiring manager, map specific experience to the role, keep it 250-350 words.
+
+7. **CV tweaks**: Output a bullet list in the terminal — do NOT write a file. Each delta should be concrete enough to apply immediately:
    - "Reorder: move [role] to the top of Experience"
    - "Emphasise: add [skill/keyword] to Summary"
    - "Add keyword: [term] to [section]"
    - "Trim: remove or shrink [role] — less relevant to this job"
    - Do NOT fabricate experience — only reorder, emphasise, or rephrase what's in the profile
 
-6. Ask the user: "Mark this job as applied? (y/n)" before updating `jobs.json`. Only update if they confirm.
+8. **Summary**: Present what was found and created. Ask: "Mark this job as applied? (y/n)". Only update `jobs.json` if they confirm.
 
-7. If confirmed, change the job's status to `"applied"` and set `dates.applied` to today's date. Then present: "Cover letter ready in `applications/<id>/`. Job marked as applied. Run `/pipeline-status` to see your pipeline."
+9. If confirmed, change the job's status to `"applied"` and set `dates.applied` to today's date. Then present: "Application materials ready in `applications/<id>/`. Job marked as applied. Run `/pipeline-status` to see your pipeline."
