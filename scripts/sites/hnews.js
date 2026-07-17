@@ -54,6 +54,7 @@ module.exports = {
           location: "See listing",
           url: "",
           snippet: text.slice(0, 300),
+          source: "hnews",
         };
       });
   },

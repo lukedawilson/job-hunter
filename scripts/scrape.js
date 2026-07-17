@@ -39,8 +39,11 @@ async function scrape(source, query, limit, pages = 1) {
     for (let p = 0; p < pages; p++) {
       const jobs = await site.search(context, query, limit, p);
       for (const j of jobs) {
-        if (j.title && !seen.has(j.url)) {
-          seen.add(j.url);
+        if (!j.title) continue;
+        const dedupKey = j.listing_url || j.url || `${j.title}::${j.company}`;
+        if (!seen.has(dedupKey)) {
+          seen.add(dedupKey);
+          if (!j.source) j.source = source;
           allJobs.push(j);
         }
       }

@@ -37,7 +37,7 @@ module.exports = {
             const url = href.startsWith("/") ? `https://www.indeed.com${href}` : href;
             const salaryEl = el.querySelector(".salary-snippet-container, .attribute_snippet");
             const salary = salaryEl?.textContent?.trim() ?? "";
-            return { title, company, location, url, salary };
+            return { title, company, location, url, salary, source: "indeed" };
           })
           .filter(
             (j) =>

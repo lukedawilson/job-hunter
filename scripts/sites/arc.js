@@ -36,6 +36,7 @@ module.exports = {
               url: href.startsWith("http")
                 ? href
                 : `https://arc.dev${href}`,
+              source: "arc",
             };
           })
           .filter(

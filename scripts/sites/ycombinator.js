@@ -45,6 +45,7 @@ module.exports = {
                 ? href
                 : `https://www.ycombinator.com${href}`,
               location: "",
+              source: "ycombinator",
             };
           })
           .filter(

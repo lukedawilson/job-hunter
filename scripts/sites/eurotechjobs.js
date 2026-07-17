@@ -45,6 +45,7 @@ module.exports = {
               url: h3a.href.startsWith("http")
                 ? h3a.href
                 : `https://www.eurotechjobs.com${h3a.getAttribute("href")}`,
+              source: "eurotechjobs",
             };
           })
           .filter(Boolean)

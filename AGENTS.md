@@ -24,5 +24,13 @@ Before adding a dependency, changing the data model, or altering the scraping ap
 - **Config:** `.jobhunterrc` and the data directory are gitignored. Each user maintains their own.
 - **Dependencies:** root `package.json` for tool dependencies (Playwright, etc.). `.opencode/package.json` is for the OpenCode plugin runtime only (gitignored).
 - **Scraping:** use Playwright + stealth. See ADR 0001. Rate limit, isolate contexts per source.
+- **Job object schema:** each entry in `jobs.json` follows this shape:
+  - `title` — job title
+  - `company` — company name
+  - `location` — location string
+  - `url` — primary URL. For paywalled sources this is the resolved direct ATS/company link (or `null` if unverifiable). For non-paywalled sources this is the listing URL.
+  - `listing_url` — the board listing URL (present on paywalled sources; useful for reference)
+  - `source` — which scraper produced the listing (e.g. `"weworkremotely"`, `"indeed"`)
+  - `unverifiable` — `true` if the listing came from a paywalled source and the direct company link could not be resolved
 - **No comments:** don't add comments to code files unless asked.
 - **Commit only when asked.**

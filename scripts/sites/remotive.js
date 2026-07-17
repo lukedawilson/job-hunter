@@ -39,6 +39,7 @@ module.exports = {
               company,
               location: "Remote",
               url: a.href,
+              source: "remotive",
             };
           })
           .filter(
