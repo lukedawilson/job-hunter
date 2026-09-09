@@ -39,6 +39,10 @@ Before adding a dependency, changing the data model, or altering the scraping ap
 
 No conversational filler or "Claude-speak". Open with the substance: never announce that you're about to make a point or that you found something. Applies everywhere, especially text drafted for the user to send to others (cover letters, application answers, emails), since it reads as the user's own voice.
 
+### Unslop pass (mandatory on all generated text)
+
+Before generating any text the user might read or send (cover letters, application answers, emails, chat replies, commit messages), read `.agents/skills/unslop/SKILL.md` and its `references/core-contract.md` (the single behavior contract), and apply them on top of the rules above. Treat both rule lists as one set. When they conflict, the stricter reading wins.
+
 ### No em dashes
 
 Never use an em dash (—) anywhere: chat replies, cover letters, application answers, data files, commit messages. Use a comma, colon, full stop, or parentheses instead.
@@ -71,6 +75,8 @@ Never use an em dash (—) anywhere: chat replies, cover letters, application an
 | Puffery: "pivotal", "testament to", "evolving landscape", "sets the stage for", "deeply rooted" | Cut it, state what happened | Decoration, not information; none of it survives "what does this tell the reader to do or know?" |
 | Superficial `-ing` tails: "…, highlighting X", "…, ensuring Y", "…, showcasing Z" hung off a clause | End the sentence, or state X as its own fact with the source | The trailing clause asserts significance without evidence and usually just restates the main clause |
 | "Not just X, but Y" | State Y directly | Manufactured contrast; the "not just X" half carries no information |
+| Contrast tail that only asserts significance: "...dependable now, not aspirational" | Cut the "not X" half. Let the fact and its consequence stand: "Given the volume doubles every quarter, the software has to be dependable now." | The negative half carries no checkable information. General case of "Not just X, but Y" |
+| Dangling demonstrative pronoun referring forward: "I build that." with "that" defined only by the next sentence | Fuse the sentences and name the noun: "I build the development process and the systems that hold up under real load." | Makes the reader hold an unresolved reference until the next sentence; the noun is the information, write it |
 | Forcing three: padding a point into a group of three parallel items for rhythm | Use the real number: one, two, or five | Rhythm-driven, not content-driven; the third item is usually invented to fill the pattern |
 | Synonym cycling: "the stream… the combined media stream… the angle… it" for one thing in a paragraph | Pick one term and repeat it | Reads like variety but forces the reader to check whether these are the same thing |
 | False range: "from timeouts to schema drift" where the endpoints aren't on one scale | List the items plainly | "From X to Y" implies a spectrum that isn't there |
