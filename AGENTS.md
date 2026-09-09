@@ -23,6 +23,7 @@ Before adding a dependency, changing the data model, or altering the scraping ap
 - **Applications:** per-job outputs go in `<dataPath>/applications/<job-id>/` (cover-letter.md, cv.md).
 - **Config:** `.jobhunterrc` and the data directory are gitignored. Each user maintains their own.
 - **Dependencies:** root `package.json` for tool dependencies (Playwright, etc.). `.opencode/package.json` is for the OpenCode plugin runtime only (gitignored).
+- **Skills:** the `unslop` skill is vendored at `.agents/skills/unslop/` and restored from `skills-lock.json` (source `theclaymethod/unslop`). The mandatory unslop pass depends on it. Check it exists before doing any work that generates text. If `.agents/skills/unslop/SKILL.md` is missing, run `./scripts/install-unslop.sh` before continuing.
 - **Scraping:** use Playwright + stealth. See ADR 0001. Rate limit, isolate contexts per source.
 - **Job object schema:** each entry in `jobs.json` follows this shape:
   - `title`: job title

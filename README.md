@@ -6,6 +6,19 @@ Slash commands for searching jobs, applying to them, and tracking your applicati
 
 Run `/build-profile` first. It interviews you and can ingest your CV, LinkedIn, and GitHub to populate your profile. On first run, you'll be asked where to store your data (default: `./data`).
 
+## Dependencies
+
+- **Node.js 20+** and npm for the scraper scripts.
+- **npm packages**: run `npm install` once. This pulls Playwright, playwright-extra, and the stealth plugin used for scraping.
+- **Playwright browsers**: run `npx playwright install` once after `npm install`.
+- **unslop skill**: the mandatory unslop pass reads `.agents/skills/unslop/` (see AGENTS.md). Restore it from `skills-lock.json`:
+
+  ```bash
+  ./scripts/install-unslop.sh
+  ```
+
+  The script is a no-op if the skill is already present.
+
 ## Commands
 
 | Command | What it does |
