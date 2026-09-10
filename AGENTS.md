@@ -48,6 +48,10 @@ Before generating any text the user might read or send (cover letters, applicati
 
 Never use an em dash (—) anywhere: chat replies, cover letters, application answers, data files, commit messages. Use a comma, colon, full stop, or parentheses instead.
 
+### No over-claiming
+
+Every claim in generated text (cover letters, application answers, emails) must be directly supported by `<dataPath>/profile.md`. Never invent employers, durations, scales, or skills. Never inflate extent: if the profile does not show a majority, do not write "most of my career"; if it says "proficient", do not write "expert" or "deep". When extent or duration is not stated, name only where the skill was used (e.g. "my main toolkit across client work since 2017", with the roles to back it), not how much of a career it represents.
+
 ### Claude bullshit to avoid
 
 | Phrase / pattern | Instead | Why |
@@ -87,3 +91,4 @@ Never use an em dash (—) anywhere: chat replies, cover letters, application an
 | Abstract-metaphor nouns: "substrate", "wedge", "vector", "surface" (as in "API surface"), "flywheel", "north star", "scaffolding"/"harness"/"ratchet" as metaphor | The concrete word: "base", "add", "way/method", the mechanism's real name | General case of the "load-bearing"/"anchor" rows: reads technical, means less than a plain word. If I can't define it concretely here, it's dressing |
 | Fancy synonyms for plain verbs: "utilize", "leverage", "facilitate", "numerous" | "use", "use", "help", "many" | The fancier word is never clearer |
 | "That's the right shape" / "right shape" as a verdict on someone's summary or understanding | State what is correct and what needs adjusting | Approval-flavoured filler; the correction is the content, not the meta-verdict on their model |
+| **Cliches**: "home turf", "in my wheelhouse", "sweet spot", "perfect fit", "at the end of the day", "hit the ground running", "the core of what I do", "bread and butter", "wearing many hats" | The plain statement of the specific fact: "I have twenty-plus years across TypeScript, Node, React, and PostgreSQL" | A cliche is a stock phrase standing in for a specific fact; the specific fact is the content. This is a CLASS: any stock idiom doing the work of a concrete claim gets replaced by the claim itself |
