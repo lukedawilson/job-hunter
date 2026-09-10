@@ -38,6 +38,7 @@ User query: $ARGUMENTS
    - Remove onsite/hybrid (unless also "remote")
    - Filter US-geolocked jobs from us_biased sources
    - Flag us_biased "Remote" jobs for manual verification
+   - Flag unverifiable jobs from paywalled sources for ATS cross-check (see step 6)
 
    Review the script's `results` array (already pre-filtered) and apply additional profile checks the script cannot do from the thin scraper output:
 
@@ -66,6 +67,12 @@ User query: $ARGUMENTS
    - `Visa: US citizenship/visa not required` + user-region location = eligible.
 
    **We Work Remotely / Remote OK / Remotive** — `webfetch` the listing; the region tag must be "Anywhere in the World" or include the user's region. Grafana-style postings list explicit eligible countries ("UK, Germany, Spain, Ireland and Sweden") — if the user's country is not listed, surface it rather than silently keeping.
+
+   **ATS cross-check (mandatory for check_listing sources)** — boards like WWR let employers tag location loosely: a listing can say "Anywhere in the World" while the employer's own ATS restricts to the US. For every shortlisted job from a `check_listing` source (and every job flagged as unverifiable by filter-jobs), find the employer's own ATS posting before presenting:
+   - Greenhouse: `curl -s "https://boards-api.greenhouse.io/v1/boards/<company-slug>/jobs?content=true"` (public JSON, no auth). Match by title, read `location.name`. "Remote - US" or a list of US states = drop.
+   - Lever: `https://api.lever.co/v0/postings/<company-slug>?mode=json`. Ashby: `https://api.ashbyhq.com/posting-api/job-board/<company-slug>`. Workable: `https://apply.workable.com/api/v3/accounts/<company-slug>/jobs`.
+   - The company slug is usually the lowercase company name without spaces or punctuation.
+   - If the ATS posting restricts to the US or excludes the user's region, drop the job. If no ATS posting is found, keep the job and flag it as unverified in the summary.
 
 7. Present results as a numbered table:
 

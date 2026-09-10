@@ -14,6 +14,7 @@ function filterJobs(jobs, preferences) {
     filteredHybrid: 0,
     filteredUsGeolocked: 0,
     flaggedUsBiased: 0,
+    flaggedUnverifiable: 0,
   };
 
   for (const job of jobs) {
@@ -50,6 +51,14 @@ function filterJobs(jobs, preferences) {
         });
         stats.flaggedUsBiased++;
       }
+    }
+
+    if (job.unverifiable === true && meta.paywalled === true) {
+      flags.push({
+        job: { title: job.title, company: job.company, url: job.listing_url || job.url, source: job._source },
+        reason: "unverifiable listing from paywalled source: board tag may hide US-only ATS location, cross-check employer ATS",
+      });
+      stats.flaggedUnverifiable++;
     }
 
     results.push(job);
@@ -105,7 +114,7 @@ if (require.main === module) {
         if (!job._sourceMeta) {
           try {
             const site = require(`./sites/${source}`);
-            job._sourceMeta = { locationHint: site.meta.locationHint };
+            job._sourceMeta = { locationHint: site.meta.locationHint, paywalled: site.meta.paywalled };
           } catch (e) {
             job._sourceMeta = {};
           }

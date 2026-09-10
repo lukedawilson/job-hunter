@@ -112,6 +112,52 @@ describe("filterJobs", () => {
     assert.strictEqual(result.flags.length, 0);
   });
 
+  it("flags but keeps unverifiable jobs from paywalled sources", () => {
+    const input = [
+      makeJob({
+        location: "Anywhere in the World",
+        url: null,
+        listing_url: "https://weworkremotely.com/remote-jobs/acme-senior-engineer",
+        unverifiable: true,
+        _sourceMeta: { locationHint: "check_listing", paywalled: true },
+      }, "weworkremotely"),
+    ];
+
+    const result = filterJobs(input, defaultPrefs);
+    assert.strictEqual(result.results.length, 1); // kept
+    assert.strictEqual(result.flags.length, 1);
+    assert.match(result.flags[0].reason, /unverifiable/);
+    assert.strictEqual(result.flags[0].job.url, "https://weworkremotely.com/remote-jobs/acme-senior-engineer");
+    assert.strictEqual(result.stats.flaggedUnverifiable, 1);
+  });
+
+  it("does not flag verifiable jobs from paywalled sources", () => {
+    const input = [
+      makeJob({
+        unverifiable: false,
+        _sourceMeta: { locationHint: "check_listing", paywalled: true },
+      }, "weworkremotely"),
+    ];
+
+    const result = filterJobs(input, defaultPrefs);
+    assert.strictEqual(result.results.length, 1);
+    assert.strictEqual(result.flags.length, 0);
+    assert.strictEqual(result.stats.flaggedUnverifiable, 0);
+  });
+
+  it("does not flag unverifiable jobs from non-paywalled sources", () => {
+    const input = [
+      makeJob({
+        unverifiable: true,
+        _sourceMeta: { locationHint: "worldwide", paywalled: false },
+      }, "remoteok"),
+    ];
+
+    const result = filterJobs(input, defaultPrefs);
+    assert.strictEqual(result.results.length, 1);
+    assert.strictEqual(result.flags.length, 0);
+  });
+
   it("handles empty input", () => {
     const result = filterJobs([], defaultPrefs);
     assert.strictEqual(result.results.length, 0);
