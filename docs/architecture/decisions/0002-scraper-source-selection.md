@@ -10,7 +10,7 @@ Accepted
 
 The `/search` command must draw from multiple job boards. Each board presents a different technical challenge: some are SPA-only, some actively block bots, some offer RSS feeds, some are entirely client-rendered. This ADR records which sources we built scrapers for, which we skipped, and the technical rationale for each.
 
-We have 7 functioning scrapers (remoteok, weworkremotely, ycombinator, hnews, remotive, eurotechjobs, arc) plus 1 new addition (indeed). 5 were attempted but rejected or deferred.
+We have 6 functioning scrapers (remoteok, weworkremotely, ycombinator, hnews, remotive, eurotechjobs) plus 1 new addition (indeed). 5 were attempted but rejected or deferred. Arc was built, then removed in September 2026.
 
 ## Decision
 
@@ -24,8 +24,13 @@ We have 7 functioning scrapers (remoteok, weworkremotely, ycombinator, hnews, re
 | **Hacker News: Who is Hiring** | Playwright + Algolia API + comment scraping | None (all comments loaded) | Finds monthly thread via Algolia search, then scrapes comments. Low-signal but useful for niche roles |
 | **Remotive** | Playwright + listing page scraping | None (single page) | Extracts from `<a>` links with numeric-ID slugs |
 | **EuroTechJobs** | Playwright + `li.premiumJobContainer` | None (single page) | EU-focused; parsed company from text content after title |
-| **Arc** | Playwright + listing page | None (single page) | SSR-rendered page, simple link extraction |
 | **Indeed** | Playwright + search results `div.job_seen_beacon` | `&start=0,10,20,...` URL param | Largest pool: 43 results from 3 pages. Uses `&l=Remote&sort=date` |
+
+### Removed (1 source)
+
+| Source | Verdict | Reason |
+|---|---|---|
+| **Arc** | **Removed 2026-09-10** | Built as SSR link extraction, but listings skewed to short part-time freelance contracts. A full search pass produced zero trackable roles. Dropped by user decision. |
 
 ### Skipped (5 sources)
 
@@ -48,13 +53,12 @@ scripts/scrape.js          # CLI entry: --source, --query, --limit, --pages
         ├── hnews.js       # Algolia API + comment scraping
         ├── remotive.js    # Listing page
         ├── eurotechjobs.js   # EU job board
-        ├── arc.js         # SSR listing
         └── indeed.js      # Search results + URL pagination
 ```
 
 ## Consequences
 
-- **Pro:** 8 scrapers cover the major remote job boards. The Indeed addition alone tripled the raw result pool.
+- **Pro:** 7 scrapers cover the major remote job boards. The Indeed addition alone tripled the raw result pool.
 - **Pro:** Pagination framework allows scaling results per source without per-site changes.
 - **Con:** 5 sources are skipped/deferred. The worldwide-remote + staff/principal-level intersection remains narrow on the boards we can access.
 - **Risk:** New boards may emerge; the scraper framework makes adding them trivial (`require('./sites/<name>').search(context, query, limit)`).

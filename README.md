@@ -88,7 +88,6 @@ The `/search` command draws from these sources and expands as needed:
 | Remotive | Remote tech jobs |
 | EuroTechJobs | EU-focused tech roles |
 | Glassdoor Jobs | Broad coverage |
-| Arc | Remote developer jobs |
 
 Dynamically expand this list per search — if a relevant source is discovered mid-search, pull from it too.
 
