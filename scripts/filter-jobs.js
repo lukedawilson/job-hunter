@@ -17,11 +17,12 @@ function filterJobs(jobs, preferences) {
   };
 
   for (const job of jobs) {
-    if (seen.has(job.url)) {
+    const dedupKey = job.url || job.listing_url || `${job.title}|${job.company}`;
+    if (seen.has(dedupKey)) {
       stats.deduplicated++;
       continue;
     }
-    seen.add(job.url);
+    seen.add(dedupKey);
 
     const location = job.location || "";
     const meta = job._sourceMeta || {};
@@ -101,6 +102,14 @@ if (require.main === module) {
       const source = path.basename(file).replace(/^jh_search_/, "").replace(/\.json$/, "");
       for (const job of jobs) {
         if (!job._source) job._source = source;
+        if (!job._sourceMeta) {
+          try {
+            const site = require(`./sites/${source}`);
+            job._sourceMeta = { locationHint: site.meta.locationHint };
+          } catch (e) {
+            job._sourceMeta = {};
+          }
+        }
       }
       allJobs = allJobs.concat(jobs);
     } catch (e) {
